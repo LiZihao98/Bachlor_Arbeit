@@ -1,0 +1,61 @@
+# RM = 0 route on the shortest (main) path
+# RM = 1 route through the tree rooted at the current node.
+# H = 0 go forward, H = 1 go back
+# tree saved as a dictionary like: {'3': [(9, 1, 'forward'), (1, 2, 'forward'), (2, 0, 'forward')], 
+#                                   '2': [(9, 6, 'forward'), (6, 5, 'forward'), (5, 0, 'forward')], 
+#                                   '1': [(9, 4, 'forward'), (4, 8, 'forward')]}
+def route(RM, H, tree, attr, (x,y), main)
+    if {x,y} is a failed link:
+        if RM = 0:
+        # It is routing on the main path at this time.
+            tree = getCurrentNodeTree(x)
+            attr = getNextAttr(tree, attr = 0) # get first attribute
+            (x,z) = getFirstArc(tree, attr)
+            route(1, 0, tree, attr, (x,z))
+        else if RM = 1:
+        # Routing on the tree routed at node x also hits a failed edge.
+            if hasBackArc
+            # there is an arc which is the previous arc of (x,y) in this attribute of current tree
+                (w,x) = getNextArc(H=1, tree, attr, (x,y))
+                route(1, 1, tree, attr, (w,x))
+            else 
+                if hasNextAttr
+                # there is another attribute, we did not try to route.
+                    next_attr = getNextAttr(tree, attr)
+                    (x,z) = getFirstArc(tree, attr)
+                    route(1, 0, tree, next_attr, (x,z))
+                else
+                # if we have tried all attribute rooted at node x, then bounce on the main path
+                    (w,x) = getNextArcOfMainPath((x,y), H=1)
+                    route(0, 1, null, null, (w,x))
+    else if RM = 0
+        if H = 0
+        # normal route and no failed link
+            if y is destination
+                finish routing
+            else
+                (y,z) = getNextArcOfMainPath((x,y), H=0)
+                route(0, 0, null, null, (y,z))
+        else
+        # If we find a failed link in a previous route, we will try to route on the current node's tree each time.
+            tree = getCurrentNodeTree(x)
+            attr = getNextAttr(tree, attr = 0) # get first attribute
+            (x,z) = getFirstArc(tree, attr)
+            route(1, 0, tree, attr, (x,z))
+    else if RM = 1
+        if y is destination's neighbor and H = 0
+            if (y,d) is failed link
+                if hasNextArc
+                # In this attribute of the current tree can also go forwards
+                    (y,z) = getNextArc(H=0, tree, attr, (x,y))
+                    route(1, 0, tree, attr, (y,z))
+                else
+                # this arc is the last arc of this attribute -> must go back.
+                    route(1, 1, tree, attr, (x,y))
+            else
+                go through the arc (y,d) and finish the routing
+        else
+        # routing on the current tree and no failed link found
+        # Whatever forward or backward, without hitting a failed edge, then keep going.
+            (y,z) = getNextArc(H, tree, attr, (x,y))
+            route(1, H, tree, attr, (y,z))
