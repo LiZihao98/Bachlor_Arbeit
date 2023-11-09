@@ -11,3 +11,6 @@ The algorithm presented is a synthesis of ideas from the papers "Improving the R
 The pseudo-code of this algorithm is stored in the "RoutingAlgorithm.txt" file, which outlines the main concepts of the algorithm. The implementation code is contained within the "thesis_Algorithm.py" file. To evaluate the algorithm's performance in real-world network graphs, we utilize topological data provided by TopologyZoo, conveniently placed in the graphml folder for easy access.
 
 Additional files are related to the content concerning tree algorithms.
+
+## Output
+The results are stored in a csv file, which is located in the defined output or output_graphm
