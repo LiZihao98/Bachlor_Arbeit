@@ -816,9 +816,9 @@ def getNextAttrPath(tree, attr):
             try:
                 next_index = keys.index(attr) + 1
                 return tree[keys[next_index]]
-            except IndexError:  # 如果给定的 key 是最后一个
+            except IndexError:  # If the given key is the last
                 return None
-            except ValueError:  # 如果给定的 key 不在字典中
+            except ValueError:  # If the given key is not in the dictionary
                 return None
 # get the next arc of "arc"
 def getNextArc(attr_path, arc, H, route_list, fails):
@@ -994,7 +994,7 @@ def route(H, tree, edge, fails, tree_list, d, d_neighbor, route_list):
 
 
 
-print("##################### 开始 #############################")
+print("##################### Test #############################")
 def main(p, no_nodes, rep, failureModel, edgeFailFactorPar = None, failurePercentPar=None, failureDropPar=None, graphMLpath = None):
     now = datetime.now()
     dt_string = now.strftime("%Y-%m-%d_%H-%M-%S")
@@ -1032,10 +1032,10 @@ def main(p, no_nodes, rep, failureModel, edgeFailFactorPar = None, failurePercen
                 g = loadedML
             else:
                 # print("iteration", rep)
-                g = nx.erdos_renyi_graph(no_nodes, p) # ER图
+                g = nx.erdos_renyi_graph(no_nodes, p) 
                 # g = nx.random_regular_graph(p, no_nodes, seed=None)
             # degrees = dict(g.degree())
-            # # 计算平均度数
+            # # set average degree
             # avg_degree = sum(degrees.values()) / len(degrees)
             # if avg_degree > 2.5:
             #     continue
@@ -1080,7 +1080,7 @@ def main(p, no_nodes, rep, failureModel, edgeFailFactorPar = None, failurePercen
                     else:
                         edgesToFail = int(round(no_failed_edges * edgeFailFactorPar))
                     try:
-                        # 并在所有边中随机选择edgesToFail个故障边
+                        # randomly select edgesToFail faulty edges among all edges
                         failed_edges = random.sample(edges, edgesToFail)
                     except ValueError:
                         continue
@@ -1105,7 +1105,7 @@ def main(p, no_nodes, rep, failureModel, edgeFailFactorPar = None, failurePercen
                     # clustered, it means that the destination node d is the center and the surrounding edges are affected, 
                     # and the farther away from d, the smaller the effect is.
                     failed_edges = []
-                    # 先获取 所有与d相连的边
+                    # First get all the edges connected to d (destination node)
                     incidents = list(g.edges(d))
                     if failurePercentPar is None:
                         failureStart = 0.6
@@ -1123,11 +1123,12 @@ def main(p, no_nodes, rep, failureModel, edgeFailFactorPar = None, failurePercen
                     # After updating failurePercent, with new failurePercent probability, select the edge directly connected to the neighbor of d, step by step to expand the influence range.
                     # But the farther away from d, the smaller the failure probability is
                     while failurePercent > 0.0:
-                        # 开始以 failureStart 概率 选择 与 d 直接相连的边 作为故障边，储存在 failed_edges 中（去除重复的边）
+                        # start selecting the edge directly connected to d with failureStart probability as the fault edge, 
+                        # and store it in failed_edges (removing duplicate edges)
                         sampleNr = math.floor(failurePercent * len(incidents))
                         failed_edges.extend(random.sample(incidents, sampleNr))
                         failed_edges = list(dict.fromkeys(failed_edges)) #remove duplicates
-                        # 将与 d 相连的节点都保存在 next_incidents 中（去除重复的），一步步扩大影响范围，
+                        # save all nodes connected to d in next_incidents (remove duplicates), and expand the scope of influence step by step,
                         next_incidents = []
                         for edge in incidents:
                             next_incidents.extend(list(g.edges(edge[1])))
@@ -1297,108 +1298,108 @@ if __name__ == "__main__":
 
 
 
-def errorFinder():
-    G = nx.Graph()
-    G.add_nodes_from([(i, {"attr": "0"}) for i in range(0, 35)])
-    # G.nodes[16]["attr"] = "s"
-    # G.nodes[15]["attr"] = "d"
-    s = 16
-    d = 15
-    # G.add_edges_from([(1, 9, {"attr": "0"}),
-    #                 (9, 4, {"attr": "0"}),
-    #                 (9, 6, {"attr": "0"}),
-    #                 (1, 7, {"attr": "0"}),
-    #                 (2, 1, {"attr": "0"}),
-    #                 (4, 8, {"attr": "0"}),
-    #                 (6, 5, {"attr": "0"}),
-    #                 (4, 6, {"attr": "0"}),
-    #                 (2, 7, {"attr": "0"}),
-    #                 (7, 8, {"attr": "0"}),
-    #                 (2, 0, {"attr": "0"}),
-    #                 (8, 3, {"attr": "0"}),
-    #                 (3, 5, {"attr": "0"}),
-    #                 (0, 5, {"attr": "0"}),
-    #                 (0, 3, {"attr": "0"})])
-    G.add_edges_from([(0, 3, {'attr': '0'}),
-    (0, 19, {'attr': '0'}),
-    (0, 24, {'attr': '0'}),
-    (1, 6, {'attr': '0'}),
-    (1, 8, {'attr': '0'}),
-    (1, 10, {'attr': '0'}),
-    (1, 12, {'attr': '0'}),
-    (1, 15, {'attr': '0'}),
-    (1, 22, {'attr': '0'}),
-    (2, 3, {'attr': '0'}),
-    (2, 15, {'attr': '0'}),
-    (2, 16, {'attr': '0'}),
-    (2, 18, {'attr': '0'}),
-    (3, 5, {'attr': '0'}),
-    (3, 16, {'attr': '0'}),
-    (4, 10, {'attr': '0'}),
-    (4, 12, {'attr': '0'}),
-    (4, 22, {'attr': '0'}),
-    (5, 15, {'attr': '0'}),
-    (5, 22, {'attr': '0'}),
-    (5, 24, {'attr': '0'}),
-    (6, 8, {'attr': '0'}),
-    (6, 11, {'attr': '0'}),
-    (6, 12, {'attr': '0'}),
-    (8, 18, {'attr': '0'}),
-    (8, 23, {'attr': '0'}),
-    (9, 15, {'attr': '0'}),
-    (10, 11, {'attr': '0'}),
-    (10, 14, {'attr': '0'}),
-    (10, 23, {'attr': '0'}),
-    (11, 15, {'attr': '0'}),
-    (12, 16, {'attr': '0'}),
-    (12, 20, {'attr': '0'}),
-    (15, 17, {'attr': '0'}),
-    (15, 23, {'attr': '0'}),
-    (16, 23, {'attr': '0'}),
-    (16, 24, {'attr': '0'}),
-    (17, 21, {'attr': '0'}),
-    (17, 23, {'attr': '0'}),
-    (18, 21, {'attr': '0'}),
-    (20, 21, {'attr': '0'}),
-    (20, 23, {'attr': '0'})])
-    # G = nx.Graph(nx.read_graphml("src/graphml/AttMpls.graphml"))
-    # s = '6'
-    # d = '10'
-    # nx.set_edge_attributes(G, "0", "attr")
-    # nx.set_node_attributes(G, "0", "attr")
-    # # 创建 d 的邻居节点保存在 d_incidents (list) 中
-    G.nodes[s]["attr"] = "s"
-    G.nodes[s]["label"] = "s"
-    G.nodes[d]["attr"] = "d"
-    G.nodes[d]["label"] = "d"
-    d_incidents = []
-    for d_edge in G.edges(d):
-        d_incidents.append(d_edge[1])
-    print(f"d_incidents:{d_incidents}")
-    # 创建最短路径
-    shortest_path = nx.shortest_path(G.copy(), s, d)
-    failed_edges = [(9, 15), (1, 8), (10, 11), (1, 6), (10, 23), (1, 15), (17, 23), (6, 8), (0, 3), (11, 15), (0, 24), (6, 12), (16, 23), (4, 22), (0, 19), (5, 22), (20, 23), (2, 15), (15, 23), (5, 24), (3, 16), (8, 23), (5, 15), (4, 12), (12, 20), (1, 10), (20, 21), (16, 24)]
-    tree_list = makeEDP(G, shortest_path, d)
-    first_edge = (shortest_path[0], shortest_path[1], 'forward')
-    print(f"first_edge:{first_edge}")
-    if (first_edge[0], first_edge[1]) not in failed_edges and (first_edge[1], first_edge[0]) not in failed_edges:
-        route_list = [first_edge]
-    else:
-        route_list = list()
-    # try:
-    routeEDP(0, None, first_edge, failed_edges, tree_list, d, route_list)
-    # except Exception as e:
-    #     print("route_list")
-    #     print(route_list)
-    #     print(f"s:{s},d:{d}")
-    print(route_list)
-    hops, sp_length, overallNodeAdditions, hops_unranked, g_res_mult, routed_paths_mult, rankings_mult, tree_order_ranked_mult, timeEDP1, timeMult \
-                            = kResilienceTrees(s, d, failed_edges, G.copy(), version="multiple", unranked=True, draw=False, treeChoice="shortest")
-    print(f"hops:{hops}")
-    for node, data in g_res_mult.nodes(data=True):
-        print(f"Node {node}: {data}")
-    for edge in g_res_mult.edges(data=True):
-        print(f"Edge {edge}")
+# def errorFinder():
+#     G = nx.Graph()
+#     G.add_nodes_from([(i, {"attr": "0"}) for i in range(0, 35)])
+#     # G.nodes[16]["attr"] = "s"
+#     # G.nodes[15]["attr"] = "d"
+#     s = 16
+#     d = 15
+#     # G.add_edges_from([(1, 9, {"attr": "0"}),
+#     #                 (9, 4, {"attr": "0"}),
+#     #                 (9, 6, {"attr": "0"}),
+#     #                 (1, 7, {"attr": "0"}),
+#     #                 (2, 1, {"attr": "0"}),
+#     #                 (4, 8, {"attr": "0"}),
+#     #                 (6, 5, {"attr": "0"}),
+#     #                 (4, 6, {"attr": "0"}),
+#     #                 (2, 7, {"attr": "0"}),
+#     #                 (7, 8, {"attr": "0"}),
+#     #                 (2, 0, {"attr": "0"}),
+#     #                 (8, 3, {"attr": "0"}),
+#     #                 (3, 5, {"attr": "0"}),
+#     #                 (0, 5, {"attr": "0"}),
+#     #                 (0, 3, {"attr": "0"})])
+#     G.add_edges_from([(0, 3, {'attr': '0'}),
+#     (0, 19, {'attr': '0'}),
+#     (0, 24, {'attr': '0'}),
+#     (1, 6, {'attr': '0'}),
+#     (1, 8, {'attr': '0'}),
+#     (1, 10, {'attr': '0'}),
+#     (1, 12, {'attr': '0'}),
+#     (1, 15, {'attr': '0'}),
+#     (1, 22, {'attr': '0'}),
+#     (2, 3, {'attr': '0'}),
+#     (2, 15, {'attr': '0'}),
+#     (2, 16, {'attr': '0'}),
+#     (2, 18, {'attr': '0'}),
+#     (3, 5, {'attr': '0'}),
+#     (3, 16, {'attr': '0'}),
+#     (4, 10, {'attr': '0'}),
+#     (4, 12, {'attr': '0'}),
+#     (4, 22, {'attr': '0'}),
+#     (5, 15, {'attr': '0'}),
+#     (5, 22, {'attr': '0'}),
+#     (5, 24, {'attr': '0'}),
+#     (6, 8, {'attr': '0'}),
+#     (6, 11, {'attr': '0'}),
+#     (6, 12, {'attr': '0'}),
+#     (8, 18, {'attr': '0'}),
+#     (8, 23, {'attr': '0'}),
+#     (9, 15, {'attr': '0'}),
+#     (10, 11, {'attr': '0'}),
+#     (10, 14, {'attr': '0'}),
+#     (10, 23, {'attr': '0'}),
+#     (11, 15, {'attr': '0'}),
+#     (12, 16, {'attr': '0'}),
+#     (12, 20, {'attr': '0'}),
+#     (15, 17, {'attr': '0'}),
+#     (15, 23, {'attr': '0'}),
+#     (16, 23, {'attr': '0'}),
+#     (16, 24, {'attr': '0'}),
+#     (17, 21, {'attr': '0'}),
+#     (17, 23, {'attr': '0'}),
+#     (18, 21, {'attr': '0'}),
+#     (20, 21, {'attr': '0'}),
+#     (20, 23, {'attr': '0'})])
+#     # G = nx.Graph(nx.read_graphml("src/graphml/AttMpls.graphml"))
+#     # s = '6'
+#     # d = '10'
+#     # nx.set_edge_attributes(G, "0", "attr")
+#     # nx.set_node_attributes(G, "0", "attr")
+#     # # 创建 d 的邻居节点保存在 d_incidents (list) 中
+#     G.nodes[s]["attr"] = "s"
+#     G.nodes[s]["label"] = "s"
+#     G.nodes[d]["attr"] = "d"
+#     G.nodes[d]["label"] = "d"
+#     d_incidents = []
+#     for d_edge in G.edges(d):
+#         d_incidents.append(d_edge[1])
+#     print(f"d_incidents:{d_incidents}")
+#     # 创建最短路径
+#     shortest_path = nx.shortest_path(G.copy(), s, d)
+#     failed_edges = [(9, 15), (1, 8), (10, 11), (1, 6), (10, 23), (1, 15), (17, 23), (6, 8), (0, 3), (11, 15), (0, 24), (6, 12), (16, 23), (4, 22), (0, 19), (5, 22), (20, 23), (2, 15), (15, 23), (5, 24), (3, 16), (8, 23), (5, 15), (4, 12), (12, 20), (1, 10), (20, 21), (16, 24)]
+#     tree_list = makeEDP(G, shortest_path, d)
+#     first_edge = (shortest_path[0], shortest_path[1], 'forward')
+#     print(f"first_edge:{first_edge}")
+#     if (first_edge[0], first_edge[1]) not in failed_edges and (first_edge[1], first_edge[0]) not in failed_edges:
+#         route_list = [first_edge]
+#     else:
+#         route_list = list()
+#     # try:
+#     routeEDP(0, None, first_edge, failed_edges, tree_list, d, route_list)
+#     # except Exception as e:
+#     #     print("route_list")
+#     #     print(route_list)
+#     #     print(f"s:{s},d:{d}")
+#     print(route_list)
+#     hops, sp_length, overallNodeAdditions, hops_unranked, g_res_mult, routed_paths_mult, rankings_mult, tree_order_ranked_mult, timeEDP1, timeMult \
+#                             = kResilienceTrees(s, d, failed_edges, G.copy(), version="multiple", unranked=True, draw=False, treeChoice="shortest")
+#     print(f"hops:{hops}")
+#     for node, data in g_res_mult.nodes(data=True):
+#         print(f"Node {node}: {data}")
+#     for edge in g_res_mult.edges(data=True):
+#         print(f"Edge {edge}")
     
 # errorFinder()
 # def finaltest(repeat):
