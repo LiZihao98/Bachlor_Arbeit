@@ -12,5 +12,12 @@ The pseudo-code of this algorithm is stored in the "RoutingAlgorithm.txt" file, 
 
 Additional files are related to the content concerning tree algorithms.
 
+## Experiments and Tests
+For experiments and tests, random graphs can be generated (e.g., using the relevant methods provided by NetworkX) or topologies from the Topology Zoo can be utilized, with corresponding files found in the graphml folder. To conduct an experiment/test, simply run the thesis_Algorithm.py file, executing it by calling the main function and providing all necessary parameters.
+
+Experiments can also be conducted using the test method starting at line 1220 in the thesis_Algorithm.py file. By default, this tests the real-world network topology of Cogentco from the Topology Zoo under a clustered fault mode. To test other topologies, first modify the address where the summary file is saved at line 1223. Then, when calling main (at line 1240), change the "graphMLpath" parameter. To test under a random fault mode, replace "clustered" with "random" at line 1240 and remove the failurePercentPar and failureDropPar, replacing them with the setting of edgeFailFactorPar, as shown in the comment at line 1241.
+
+To experiment with artificial random graphs, simply remove the graphMLpath parameter set when calling main.
+
 ## Output
 The results are stored in a csv file, which is located in the defined output or output_graphm
