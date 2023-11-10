@@ -1226,8 +1226,8 @@ if __name__ == "__main__":
     no_nodes = 10
     writemode = 'w' if no_nodes == 25 else 'a'
     repeats = 200
-    # failpercent = 0.1
-    edgeFailFactorPar = 1
+    failpercent = 0.1
+    # edgeFailFactorPar = 1
     with open(csv_name, mode='w') as csv_file:
         fieldnames = ["Avg. Hops of Tree with Header", "Avg. Hops of EDP with Header", "Avg. Hops of MutipleTree", "Resilience of Tree with Header", "Resilience of EDP with Header", "Resilience of Tree"]
         writer = csv.DictWriter(csv_file, fieldnames=fieldnames)
