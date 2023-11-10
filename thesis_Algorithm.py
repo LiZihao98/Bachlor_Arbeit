@@ -1010,7 +1010,10 @@ def main(p, no_nodes, rep, failureModel, edgeFailFactorPar = None, failurePercen
         loadedML = nx.Graph(nx.read_graphml(graphMLpath))
         no_nodes = loadedML.number_of_nodes()
         p = graphMLpath
-        csv_name = "output_{}_{}/trees-n{}-ff{}.csv".format(graphMLpath, failureModel, no_nodes, failurePercentPar)
+        if failureModel == "clustered":
+            csv_name = "output_{}_{}/trees-n{}-ff{}.csv".format(graphMLpath, failureModel, no_nodes, failurePercentPar)
+        else:
+            csv_name = "output_{}_{}/trees-n{}-ff{}.csv".format(graphMLpath, failureModel, no_nodes, edgeFailFactorPar)
     else:
         if failureModel == "clustered":
             csv_name = "output/trees-cluster-p{}-n{}-ff{}.csv".format(p, no_nodes, failurePercentPar)
@@ -1216,86 +1219,36 @@ DEBUG = False
 
 if __name__ == "__main__":
     graphMLpaths = ["graphml/AttMpls.graphml", "graphml/Cogentco.graphml", "graphml/Deltacom.graphml", "graphml/GtsCe.graphml", "graphml/Interoute.graphml", "graphml/Oteglobe.graphml"]
-    graphMLpath = graphMLpaths[5]
     graphMLpath = None
-    treeChoices = ["shortest", "average", "edgeCount"]
-    # G = nx.Graph(nx.read_graphml(graphMLpaths[5]))
-    # degrees = dict(G.degree())
-    # # 计算平均度数
-    # avg_degree = sum(degrees.values()) / len(degrees)
-    # print(avg_degree)
     csv_name = "output_graphml/Cogentco.graphml_clustered/summary.csv"
     # csv_name = "output/summary.csv"
     p = 0.15
     no_nodes = 10
     writemode = 'w' if no_nodes == 25 else 'a'
     repeats = 200
-    failpercent = 0.6
+    # failpercent = 0.1
+    edgeFailFactorPar = 1
     with open(csv_name, mode='w') as csv_file:
-        # fieldnames = ["Runtime of Tree with Header", "Runtime of EDP with Header", "Runtime of MutipleTree"]
         fieldnames = ["Avg. Hops of Tree with Header", "Avg. Hops of EDP with Header", "Avg. Hops of MutipleTree", "Resilience of Tree with Header", "Resilience of EDP with Header", "Resilience of Tree"]
         writer = csv.DictWriter(csv_file, fieldnames=fieldnames)
         writer.writeheader()
         while failpercent <= 0.9:
+        # while edgeFailFactorPar <= 25:
             print(failpercent)
+            # print(edgeFailFactorPar)
             csv_dict = {}
             avg_hops, avg_hops_tree, avg_hops_edp, resilience, resilience_tree, resilience_edp = main(p, no_nodes, repeats, "clustered", failurePercentPar = failpercent, failureDropPar = 0.3, graphMLpath = graphMLpaths[1])
+            # avg_hops, avg_hops_tree, avg_hops_edp, resilience, resilience_tree, resilience_edp = main(p, no_nodes, repeats, "random", edgeFailFactorPar = edgeFailFactorPar, graphMLpath = graphMLpaths[1])
             csv_dict["Avg. Hops of Tree with Header"] = avg_hops
             csv_dict["Avg. Hops of EDP with Header"] = avg_hops_edp
             csv_dict["Avg. Hops of MutipleTree"] = avg_hops_tree
             csv_dict["Resilience of Tree with Header"] = resilience
             csv_dict["Resilience of Tree"] = resilience_tree
             csv_dict["Resilience of EDP with Header"] = resilience_edp
-            # writer.writerow(csv_dict)
             failpercent += 0.1
             failpercent = round(failpercent, 1)
+            # edgeFailFactorPar += 1
             writer.writerow(csv_dict)
-    # csv_name = "output/summary.csv"
-    # p = 0.03
-    # no_nodes = 100
-    # writemode = 'w' if no_nodes == 25 else 'a'
-    # repeats = 200
-    # failpercent = 0.1
-    # with open(csv_name, mode='w') as csv_file:
-    #     fieldnames = ["Avg. Hops of Tree with Header", "Avg. Hops of EDP with Header", "Avg. Hops of MutipleTree", "Resilience of Tree with Header", "Resilience of EDP with Header", "Resilience of Tree"]
-    #     writer = csv.DictWriter(csv_file, fieldnames=fieldnames)
-    #     writer.writeheader()
-    #     while failpercent <= 0.9:
-    #         print(failpercent)
-    #         csv_dict = {}
-    #         avg_hops, avg_hops_tree, avg_hops_edp, resilience, resilience_tree, resilience_edp, timeMakeTree, timeMakeEDP, timeMult = main(p, no_nodes, repeats, "clustered", failurePercentPar = failpercent, failureDropPar = 0.3)
-    #         csv_dict["Avg. Hops of Tree with Header"] = avg_hops
-    #         csv_dict["Avg. Hops of EDP with Header"] = avg_hops_edp
-    #         csv_dict["Avg. Hops of MutipleTree"] = avg_hops_tree
-    #         csv_dict["Resilience of Tree with Header"] = resilience
-    #         csv_dict["Resilience of Tree"] = resilience_tree
-    #         csv_dict["Resilience of EDP with Header"] = resilience_edp
-    #         writer.writerow(csv_dict)
-    #         failpercent += 0.1
-    #         failpercent = round(failpercent, 1)
-    # csv_name = "output/summary.csv"
-    # p = 0.03
-    # no_nodes = 100
-    # writemode = 'w' if no_nodes == 25 else 'a'
-    # repeats = 200
-    # edgeFailFactorPar = 1
-    # with open(csv_name, mode='w') as csv_file:
-    #     fieldnames = ["Avg. Hops of Tree with Header", "Avg. Hops of EDP with Header", "Avg. Hops of MutipleTree", "Resilience of Tree with Header", "Resilience of EDP with Header", "Resilience of Tree"]
-    #     writer = csv.DictWriter(csv_file, fieldnames=fieldnames)
-    #     writer.writeheader()
-    #     while edgeFailFactorPar <= 25:
-    #         print(edgeFailFactorPar)
-    #         csv_dict = {}
-    #         avg_hops, avg_hops_tree, avg_hops_edp, resilience, resilience_tree, resilience_edp = main(p, no_nodes, repeats, "random", edgeFailFactorPar = edgeFailFactorPar)
-    #         csv_dict["Avg. Hops of Tree with Header"] = avg_hops
-    #         csv_dict["Avg. Hops of EDP with Header"] = avg_hops_edp
-    #         csv_dict["Avg. Hops of MutipleTree"] = avg_hops_tree
-    #         csv_dict["Resilience of Tree with Header"] = resilience
-    #         csv_dict["Resilience of Tree"] = resilience_tree
-    #         csv_dict["Resilience of EDP with Header"] = resilience_edp
-    #         writer.writerow(csv_dict)
-    #         edgeFailFactorPar += 1
-
 
 
 # def errorFinder():
