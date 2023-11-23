@@ -19,5 +19,16 @@ Experiments can also be conducted using the test method starting at line 1220 in
 
 To experiment with synthetic random graphs, you need to first modify the address for saving the summary file. This involves commenting out line 1223 and using line 1224 instead. Then, when calling the main function, simply remove the graphMLpath parameter set.
 
+### Example
+**Testing Random Failure Models**
+```
+while edgeFailFactorPar <= 25:
+            csv_dict = {}
+            avg_hops, avg_hops_tree, avg_hops_edp, resilience, resilience_tree, resilience_edp = main(p, no_nodes, repeats, "random", edgeFailFactorPar = edgeFailFactorPar, graphMLpath = graphMLpaths[1])
+            ...
+            edgeFailFactorPar += 1
+            writer.writerow(csv_dict)
+```
+
 ## Output
 The results are stored in summary.csv file, which is located in the defined output or output_graphm
