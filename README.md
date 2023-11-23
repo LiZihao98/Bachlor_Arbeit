@@ -21,6 +21,7 @@ To experiment with synthetic random graphs, you need to first modify the address
 
 ### Example
 _If you want to test artificial random graphs just delete graphMLpath = graphMLpaths[1]_
+
 **Testing Random Failure Models**
 ```
 p = 0.15
