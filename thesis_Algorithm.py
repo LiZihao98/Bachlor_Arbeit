@@ -998,12 +998,12 @@ print("##################### Test #############################")
 def main(p, no_nodes, rep, failureModel, edgeFailFactorPar = None, failurePercentPar=None, failureDropPar=None, graphMLpath = None):
     now = datetime.now()
     dt_string = now.strftime("%Y-%m-%d_%H-%M-%S")
-    sum_hops = 0
-    sum_hops_tree = 0
-    sum_hops_edp = 0
-    success_times = 0
-    success_times_tree = 0
-    success_times_edp = 0
+    sum_hops = 0 # hops of Multiple tree with Header Rewriting
+    sum_hops_tree = 0 # hops of Multiple tree
+    sum_hops_edp = 0 # hops of EDP with Header Rewriting
+    success_times = 0 # successful times of Multiple tree with Header Rewriting
+    success_times_tree = 0 # successful times of Multiple tree
+    success_times_edp = 0 # successful times of EDP with Header Rewriting
 
     rep_copy = rep
     if graphMLpath:
@@ -1087,7 +1087,6 @@ def main(p, no_nodes, rep, failureModel, edgeFailFactorPar = None, failurePercen
                         failed_edges = random.sample(edges, edgesToFail)
                     except ValueError:
                         continue
-                        # 并将failurePercent设置为-1，failurePercent在随机模式中不起作用，edgeFailFactorPar在其他模式中不起作用
                     csv_dict["failure rate"] = edgeFailFactorPar
                     csv_dict["failurePercent"] = -1
                 elif failureModel == "adversarial":
